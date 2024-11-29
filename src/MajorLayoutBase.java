@@ -11,6 +11,9 @@ public abstract class MajorLayoutBase
 	public MajorLayoutBase(BaseFrame baseFrame)
 	{
 		m_baseFrame = baseFrame;
+		
+		Init();
+		Link();
 	}
 	
 	public JPanel GetMainLayout()

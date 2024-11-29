@@ -1,26 +1,22 @@
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Container;
 import java.awt.Desktop;
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+
 import java.io.File;
 import java.io.IOException;
+
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.sql.Connection;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -173,10 +169,6 @@ public class Base_SidePanel extends MajorLayoutBase
 	public Base_SidePanel(BaseFrame baseFrame)
 	{
 		super(baseFrame);
-		
-		Init();
-		
-		Link();
 	}
 	
 	@Override
