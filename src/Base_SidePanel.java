@@ -6,8 +6,11 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
@@ -21,12 +24,10 @@ import java.sql.SQLException;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.*;
 
 
-public class Base_SidePanel
+public class Base_SidePanel extends MajorLayoutBase
 {
 	public class NewsItem
 	{
@@ -49,6 +50,22 @@ public class Base_SidePanel
 			return m_layout_Main;
 		}
 		
+		public void SetNewsTitle(String newsTitle)
+		{
+			m_label_NewsTitle.setText(newsTitle);
+		}
+		public void SetUrl(String url)
+		{
+			try
+			{
+				m_uri = new URI(url);
+			}
+			catch (URISyntaxException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
 		private void Init()
 		{
 			try
@@ -65,16 +82,16 @@ public class Base_SidePanel
 			m_label_NewsTitle.setFont(new Font("", Font.PLAIN, 10));
 			m_label_NewsTitle.setForeground(Color.WHITE);
 			
-			BufferedImage urlIcon = null;
+			BufferedImage urlImage = null;
 			try
 			{
-				urlIcon = ImageIO.read(new File("./src/imgs/url.png"));
+				urlImage = ImageIO.read(new File("./src/imgs/url.png"));
 			}
 			catch (IOException e)
 			{
 				e.printStackTrace();
 			}
-			Image dimg = urlIcon.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
+			Image dimg = urlImage.getScaledInstance(15, 15, Image.SCALE_SMOOTH);
 			ImageIcon icon = new ImageIcon(dimg);
 			m_button_OpenNews = new JButton(icon);
 			m_button_OpenNews.setBounds(180, 15, 20, 20);
@@ -105,7 +122,7 @@ public class Base_SidePanel
 			m_layout_Main = new JPanel();
 			m_layout_Main.setLayout(null);
 			m_layout_Main.setBackground(new Color(33, 37, 41));
-			m_layout_Main.setPreferredSize(new Dimension(200, 50));
+			m_layout_Main.setPreferredSize(new Dimension(240, 50));
 			m_layout_Main.setVisible(true);
 			
 			m_layout_Main.add(m_label_NewsTitle);
@@ -114,14 +131,10 @@ public class Base_SidePanel
 	}
 	
 	
-	private BaseFrame m_baseFrame;
-	
-	private JPanel m_layout_Main;
-	
 	// Profile Elements
 	private JLabel m_label_Name;
 	private JLabel m_label_Roll;
-	private JLabel m_label_ProfileIcon;
+	private JButton m_button_ProfileIcon;
 	
 	// SignIn Elements
 	private JPanel m_layout_SignIn;
@@ -159,19 +172,15 @@ public class Base_SidePanel
 	
 	public Base_SidePanel(BaseFrame baseFrame)
 	{
-		m_baseFrame = baseFrame;
+		super(baseFrame);
 		
 		Init();
 		
 		Link();
 	}
 	
-	public JPanel GetMainLayout()
-	{
-		return m_layout_Main;
-	}
-	
-	private void Init()
+	@Override
+	protected void Init()
 	{
 		Init_Profile();
 		Init_SignIn();
@@ -192,19 +201,67 @@ public class Base_SidePanel
 		m_label_Roll.setForeground(Color.WHITE);
 		m_label_Roll.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		BufferedImage profileIcon = null;
+		BufferedImage profileImage = null;
 		try
 		{
-			profileIcon = ImageIO.read(new File("./src/imgs/ProfileIcon.png"));
+			profileImage = ImageIO.read(new File("./src/imgs/ProfileIcon.png"));
 		}
 		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
-		Image dimg = profileIcon.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
-		m_label_ProfileIcon = new JLabel(new ImageIcon(dimg));
-		m_label_ProfileIcon.setBounds(210, 0, 70, 70);
-		m_label_ProfileIcon.setForeground(Color.WHITE);
+		Image dimg = profileImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
+		ImageIcon icon = new ImageIcon(dimg);
+		
+		m_button_ProfileIcon = new JButton(icon);
+		m_button_ProfileIcon.setBounds(220, 10, 50, 50);
+		m_button_ProfileIcon.setBackground(new Color(44, 47, 50));
+		m_button_ProfileIcon.setForeground(Color.WHITE);
+		m_button_ProfileIcon.setBorderPainted(false);
+		m_button_ProfileIcon.setFocusPainted(false);
+		m_button_ProfileIcon.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						if(m_baseFrame.GetLoginID() == null)
+						{
+							return;
+						}
+						
+						JPanel panel = new JPanel();
+						JLabel label = new JLabel("Enter New Name :");
+						JTextField textField = new JTextField(45);
+						
+						panel.add(label);
+						panel.add(textField);
+						
+						int selection = JOptionPane.showConfirmDialog(null, panel, "Would you like to change your name?", JOptionPane.YES_NO_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+						if (selection == JOptionPane.OK_OPTION)
+						{
+							java.sql.Statement query = null;
+							try
+							{
+								query = m_baseFrame.GetSQLStatement();
+								
+								String queryContent = String.format("UPDATE `extracurricularmanagement`.`student_infos`"
+																	+ " SET `name` = '%s'"
+																	+ " WHERE (`student_uid` = '%s');",
+																	textField.getText(),
+																	m_baseFrame.GetLoginID().toString());
+								
+								query.executeUpdate(queryContent);
+								
+								RenderLoginState(textField.getText());
+							}
+							catch (SQLException ex)
+							{
+								ex.printStackTrace();
+							}
+						}
+					}
+				});
 	}
 	private void Init_SignIn()
 	{
@@ -226,6 +283,7 @@ public class Base_SidePanel
 		m_textField_ID.setBackground(new Color(39, 43, 47));
 		m_textField_ID.setForeground(Color.WHITE);
 		m_textField_ID.setHorizontalAlignment(SwingConstants.LEFT);
+		m_textField_ID.setBorder(BorderFactory.createEmptyBorder());
 		
 		m_label_Password = new JLabel("Password");
 		m_label_Password.setBounds(30, 120, 100, 30);
@@ -239,11 +297,14 @@ public class Base_SidePanel
 		m_textField_Password.setBackground(new Color(39, 43, 47));
 		m_textField_Password.setForeground(Color.WHITE);
 		m_textField_Password.setHorizontalAlignment(SwingConstants.LEFT);
+		m_textField_Password.setBorder(BorderFactory.createEmptyBorder());
 		
 		m_button_Process = new JButton("Process");
 		m_button_Process.setBounds(40, 190, 100, 30);
 		m_button_Process.setBackground(new Color(33, 37, 41));
 		m_button_Process.setForeground(Color.WHITE);
+		m_button_Process.setBorderPainted(false);
+		m_button_Process.setFocusPainted(false);
 		m_button_Process.addActionListener(new ActionListener()
 				{
 					@Override
@@ -279,6 +340,38 @@ public class Base_SidePanel
 		m_button_SignUp.setBounds(150, 190, 100, 30);
 		m_button_SignUp.setBackground(new Color(33, 37, 41));
 		m_button_SignUp.setForeground(Color.WHITE);
+		m_button_SignUp.setBorderPainted(false);
+		m_button_SignUp.setFocusPainted(false);
+		m_button_SignUp.addActionListener(new ActionListener()
+				{
+					@Override
+					public void actionPerformed(ActionEvent e)
+					{
+						java.sql.Statement query = null;
+						try
+						{
+							query = m_baseFrame.GetSQLStatement();
+							
+							String queryContent = String.format("INSERT INTO `extracurricularmanagement`.`student_infos`"
+																+ "(`student_uid`, `id`, `password`)"
+																+ "VALUES ('%s', '%s', '%s');",
+																UUID.randomUUID().toString(), m_textField_ID.getText(), m_textField_Password.getText());
+						
+							query.executeUpdate(queryContent);
+							
+							m_textField_ID.setText("");
+							m_textField_Password.setText("");
+						}
+						catch (SQLException ex)
+						{
+							ex.printStackTrace();
+							return;
+						}
+						
+						m_textField_ID.setText("");
+						m_textField_Password.setText("");
+					}
+				});
 	}
 	private void Init_LogIn()
 	{
@@ -323,14 +416,16 @@ public class Base_SidePanel
 		m_label_News.setHorizontalAlignment(SwingConstants.LEFT);
 		
 		m_panel_NewsContent = new JPanel();
-		m_panel_NewsContent.setLayout(new GridLayout(0, 1));
+		m_panel_NewsContent.setLayout(new BoxLayout(m_panel_NewsContent, BoxLayout.Y_AXIS));
 		m_panel_NewsContent.setBackground(new Color(33, 37, 41));
 		
-		m_scrollPane_News = new JScrollPane(m_panel_NewsContent);
+		m_scrollPane_News = new JScrollPane(m_panel_NewsContent, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		m_scrollPane_News.setBounds(0, 0, 230, 300);
+		m_scrollPane_News.setBorder(BorderFactory.createEmptyBorder());
 	}
 	
-	private void Link()
+	@Override
+	protected void Link()
 	{
 		// Profile
 		m_layout_Main = new JPanel()
@@ -349,7 +444,7 @@ public class Base_SidePanel
 
 		m_layout_Main.add(m_label_Name);
 		m_layout_Main.add(m_label_Roll);
-		m_layout_Main.add(m_label_ProfileIcon);
+		m_layout_Main.add(m_button_ProfileIcon);
 		
 		// SignIn
 		m_layout_SignIn = new JPanel();
@@ -394,6 +489,11 @@ public class Base_SidePanel
 		m_layout_Main.add(m_label_News);
 		m_label_News.setVisible(false);
 		
+		//for(int count = 0; count < 7; count++)
+		//{
+		//	m_panel_NewsContent.add(new NewsItem().GetMainLayout());
+		//}
+		
 		m_layout_Main.add(m_layout_News);
 	}
 	
@@ -405,6 +505,7 @@ public class Base_SidePanel
 		m_label_News.setVisible(true);
 		
 		RenderLoginState(name);
+		RenderNewsState();
 	}
 	private void RenderLoginState(String name)
 	{
@@ -416,6 +517,39 @@ public class Base_SidePanel
 		else
 		{
 			m_label_Roll.setText("Student");
+		}
+	}
+	private void RenderNewsState()
+	{
+		java.sql.Statement query = null;
+		try
+		{
+			query = m_baseFrame.GetSQLStatement();
+			
+			String queryContent = String.format("SELECT * FROM extracurricularmanagement.recommended_resources"
+												+ " WHERE student_uid = \"%s\";",
+												m_baseFrame.GetLoginID().toString());
+			
+			ResultSet result = query.executeQuery(queryContent);
+
+			var newsItemComps = m_panel_NewsContent.getComponents();
+			for(var item : newsItemComps)
+			{
+				m_panel_NewsContent.remove(item);
+			}
+			
+			while(result.next())
+			{
+				NewsItem newsItem = new NewsItem();
+				newsItem.SetNewsTitle(result.getString(4));
+				newsItem.SetUrl(result.getString(3));
+				
+				m_panel_NewsContent.add(newsItem.GetMainLayout());
+			}
+		}
+		catch (SQLException ex)
+		{
+			ex.printStackTrace();
 		}
 	}
 }

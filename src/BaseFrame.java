@@ -20,6 +20,7 @@ import java.util.UUID;
 
 public class BaseFrame extends JFrame
 {
+	// TODO : DB 연결 관련 데이터 Json Serialize 하고 AES 암호화 적용해서 Local에 저장하는 로직 추가 및 그 역도 구현
 	public class DBConnCredential
 	{
 		public String URL, User, Password;
@@ -29,9 +30,10 @@ public class BaseFrame extends JFrame
 	private Container m_contentPen;
 	
 	private Connection m_dbConn;
-	private UUID m_loginID;
+	private UUID m_loginID = null;
 	
 	private Base_SidePanel m_sidePanelInstance;
+	private Base_UpperPanel m_upperPanelInstance;
 
 	private JPanel m_layout_SidePanel;
 	
@@ -57,6 +59,11 @@ public class BaseFrame extends JFrame
 	{
 		return m_dbConn.createStatement();
 	}
+	
+	public UUID GetLoginID()
+	{
+		return m_loginID;
+	}
 	public void SetLoginID(UUID id)
 	{
 		m_loginID = id;
@@ -65,15 +72,12 @@ public class BaseFrame extends JFrame
 	private void Init()
 	{
 		m_contentPen.setBackground(new Color(33, 37, 41));
-		
-		Init_SidePanel();
-	}
-	
-	private void Init_SidePanel()
-	{
+
 		m_sidePanelInstance = new Base_SidePanel(this);
+		m_upperPanelInstance = new Base_UpperPanel(this);
 		
 		m_contentPen.add(m_sidePanelInstance.GetMainLayout());
+		//m_contentPen.add(m_upperPanelInstance.GetMainLayout());
 	}
 	
 	private void Connect2DB()
