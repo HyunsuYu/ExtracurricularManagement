@@ -220,6 +220,11 @@ public class Base_SidePanel extends MajorLayoutBase
 						{
 							return;
 						}
+						if(m_label_Name.getText().equals("admin"))
+						{
+							JOptionPane.showMessageDialog(null, "admin cannot change name", "warning", JOptionPane.WARNING_MESSAGE);
+							return;
+						}
 						
 						JPanel panel = new JPanel();
 						JLabel label = new JLabel("Enter New Name :");
