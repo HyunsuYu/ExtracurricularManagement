@@ -20,6 +20,12 @@ public class Base_UpperPanel extends MajorLayoutBase
 	{
 		super(baseFrame);
 	}
+	
+	@Override
+	public void Switch2LoginLayout()
+	{
+
+	}
 
 	@Override
 	protected void Init()

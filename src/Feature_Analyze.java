@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 
-public class Feature_Overview extends MajorLayoutBase 
+public class Feature_Analyze extends MajorLayoutBase
 {
-	public Feature_Overview(BaseFrame baseFrame)
+	public Feature_Analyze(BaseFrame baseFrame)
 	{
 		super(baseFrame);
 	}
@@ -22,7 +22,7 @@ public class Feature_Overview extends MajorLayoutBase
 	@Override
 	protected void Init()
 	{
-		
+
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class Feature_Overview extends MajorLayoutBase
 		m_layout_Main.setBackground(new Color(33, 37, 41));
 		
 		// 아래 부분은 예시이므로 실제 구현 시 삭제하고 작업할 것
-		JLabel temp = new JLabel("Overview");
+		JLabel temp = new JLabel("Analyze");
 		temp.setBounds(30, 60, 100, 30);
 		temp.setFont(new Font("", Font.PLAIN, 13));
 		temp.setForeground(Color.WHITE);

@@ -21,6 +21,9 @@ public abstract class MajorLayoutBase
 		return m_layout_Main;
 	}
 	
+	public abstract void Switch2LoginLayout();
+	
 	protected abstract void Init();
 	protected abstract void Link();
+	
 }

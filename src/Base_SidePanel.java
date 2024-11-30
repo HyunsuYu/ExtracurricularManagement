@@ -494,7 +494,13 @@ public class Base_SidePanel extends MajorLayoutBase
 		m_layout_Main.add(m_layout_News);
 	}
 	
-	private void Switch2LoginLayout(String name)
+	@Override
+	public void Switch2LoginLayout()
+	{
+		
+	}
+	
+	public void Switch2LoginLayout(String name)
 	{
 		m_layout_SignIn.setVisible(false);
 		
@@ -503,6 +509,8 @@ public class Base_SidePanel extends MajorLayoutBase
 		
 		RenderLoginState(name);
 		RenderNewsState();
+		
+		m_baseFrame.Switch2LoginLayout();
 	}
 	private void RenderLoginState(String name)
 	{

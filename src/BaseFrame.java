@@ -113,6 +113,10 @@ public class BaseFrame extends JFrame
 	private Base_SidePanel m_sidePanelInstance;
 	private Base_UpperPanel m_upperPanelInstance;
 	
+	private Feature_Overview m_feature_Overview;
+	private Feature_Lecture m_feature_Lecture;
+	private Feature_Analyze m_feature_Analyze;
+	
 	private DashboardButton m_button_Overview, m_button_Lecture, m_button_Analyze;
 	private JPanel[] m_panel_DashboardPanels;
 	
@@ -149,7 +153,7 @@ public class BaseFrame extends JFrame
 		m_loginID = id;
 	}
 	
-	public void OpenDashboardPanel(int targetIndex)
+ 	public void OpenDashboardPanel(int targetIndex)
 	{
 		//for(int dashboardIndex = 0; dashboardIndex < 3; dashboardIndex++)
 		//{
@@ -167,22 +171,40 @@ public class BaseFrame extends JFrame
 			m_button_Overview.SetActiveState(true);
 			m_button_Lecture.SetActiveState(false);
 			m_button_Analyze.SetActiveState(false);
+			
+			m_panel_DashboardPanels[0].setVisible(true);
+			m_panel_DashboardPanels[1].setVisible(false);
+			m_panel_DashboardPanels[2].setVisible(false);
 			break;
 			
 		case 1:
 			m_button_Overview.SetActiveState(false);
 			m_button_Lecture.SetActiveState(true);
 			m_button_Analyze.SetActiveState(false);
+			
+			m_panel_DashboardPanels[0].setVisible(false);
+			m_panel_DashboardPanels[1].setVisible(true);
+			m_panel_DashboardPanels[2].setVisible(false);
 			break;
 			
 		case 2:
 			m_button_Overview.SetActiveState(false);
 			m_button_Lecture.SetActiveState(false);
 			m_button_Analyze.SetActiveState(true);
+			
+			m_panel_DashboardPanels[0].setVisible(false);
+			m_panel_DashboardPanels[1].setVisible(false);
+			m_panel_DashboardPanels[2].setVisible(true);
 			break;
 		}
 	}
-	
+	public void Switch2LoginLayout()
+	{
+		m_feature_Overview.Switch2LoginLayout();
+		m_feature_Lecture.Switch2LoginLayout();
+		m_feature_Analyze.Switch2LoginLayout();
+	}
+ 	
 	private void Init()
 	{
 		m_contentPen.setBackground(new Color(33, 37, 41));
@@ -202,6 +224,22 @@ public class BaseFrame extends JFrame
 		m_contentPen.add(m_button_Overview.GetMainLayout());
 		m_contentPen.add(m_button_Lecture.GetMainLayout());
 		m_contentPen.add(m_button_Analyze.GetMainLayout());
+		
+		// Features
+		m_feature_Overview = new Feature_Overview(this);
+		m_feature_Lecture = new Feature_Lecture(this);
+		m_feature_Analyze = new Feature_Analyze(this);
+		
+		m_panel_DashboardPanels[0] = m_feature_Overview.GetMainLayout();
+		m_panel_DashboardPanels[1] = m_feature_Lecture.GetMainLayout();
+		m_panel_DashboardPanels[2] = m_feature_Analyze.GetMainLayout();
+
+		for(int index = 0; index < 3; index++)
+		{
+			m_contentPen.add(m_panel_DashboardPanels[index]);
+			m_panel_DashboardPanels[index].setVisible(false);
+		}
+		m_panel_DashboardPanels[0].setVisible(true);
 	}
 	private void Link()
 	{
