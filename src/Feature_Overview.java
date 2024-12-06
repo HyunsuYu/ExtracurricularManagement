@@ -16,7 +16,7 @@ public class Feature_Overview extends MajorLayoutBase
 	@Override
 	public void Switch2LoginLayout()
 	{
-		
+		m_baseFrame.GetLoginID().toString();
 	}
 
 	@Override

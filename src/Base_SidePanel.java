@@ -486,11 +486,6 @@ public class Base_SidePanel extends MajorLayoutBase
 		m_layout_Main.add(m_label_News);
 		m_label_News.setVisible(false);
 		
-		//for(int count = 0; count < 7; count++)
-		//{
-		//	m_panel_NewsContent.add(new NewsItem().GetMainLayout());
-		//}
-		
 		m_layout_Main.add(m_layout_News);
 	}
 	

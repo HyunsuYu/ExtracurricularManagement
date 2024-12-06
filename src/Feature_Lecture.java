@@ -1,18 +1,21 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.*;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
 import java.util.UUID;
 import java.util.Random;
+
 
 public class Feature_Lecture extends MajorLayoutBase
 {
     private UUID currentLoginID = null;
-    private int currentModuleOrder = -1;
     private JButton currentSessionButton = null;
     private JButton currentModuleButton = null;
 
@@ -191,8 +194,8 @@ public class Feature_Lecture extends MajorLayoutBase
         moduleDetailsPanel.removeAll();
 
         Color baseFrameBackgroundColor = new Color(33, 37, 41);
-        JTextArea moduleNameArea = new JTextArea("Module Name: " + moduleName);
-        moduleNameArea.setFont(new Font("Arial", Font.PLAIN, 16));
+        JTextArea moduleNameArea = new JTextArea(moduleName);
+        moduleNameArea.setFont(new Font("Arial", Font.BOLD, 16));
         moduleNameArea.setForeground(Color.WHITE);
         moduleNameArea.setBackground(baseFrameBackgroundColor);
         moduleNameArea.setLineWrap(true);
@@ -213,14 +216,15 @@ public class Feature_Lecture extends MajorLayoutBase
         moduleContentArea.setLineWrap(true);
         moduleContentArea.setWrapStyleWord(true);
         moduleContentArea.setEditable(false);
-        moduleContentArea.setBounds(10, 50, 510, 100);
+        moduleContentArea.setBounds(10, 50, 510, 140);
         moduleContentArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
         JScrollPane moduleContentScrollPane = new JScrollPane(moduleContentArea);
-        moduleContentScrollPane.setBounds(10, 50, 510, 100);
+        moduleContentScrollPane.setBounds(10, 50, 510, 140);
         moduleContentScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         moduleContentScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         moduleDetailsPanel.add(moduleContentScrollPane);
+        
         JTextArea moduleQuestionArea = new JTextArea(moduleQuestion);
         moduleQuestionArea.setFont(new Font("Arial", Font.PLAIN, 14));
         moduleQuestionArea.setForeground(Color.WHITE);
@@ -228,10 +232,11 @@ public class Feature_Lecture extends MajorLayoutBase
         moduleQuestionArea.setLineWrap(true);
         moduleQuestionArea.setWrapStyleWord(true);
         moduleQuestionArea.setEditable(false);
-        moduleQuestionArea.setBounds(10, 160, 510, 30);
+        moduleQuestionArea.setBounds(10, 200, 510, 30);
         moduleQuestionArea.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
+        
         JScrollPane moduleQuestionScrollPane = new JScrollPane(moduleQuestionArea);
-        moduleQuestionScrollPane.setBounds(10, 160, 510, 30);
+        moduleQuestionScrollPane.setBounds(10, 200, 510, 30);
         moduleQuestionScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         moduleQuestionScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         moduleDetailsPanel.add(moduleQuestionScrollPane);
@@ -243,17 +248,17 @@ public class Feature_Lecture extends MajorLayoutBase
         answerField.setLineWrap(true);
         answerField.setWrapStyleWord(true);
         answerField.setEditable(true);
-        answerField.setBounds(10, 200, 510, 60);
+        answerField.setBounds(10, 240, 510, 60);
         answerField.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5)); 
 
         JScrollPane answerFieldScrollPane = new JScrollPane(answerField);
-        answerFieldScrollPane.setBounds(10, 200, 510, 60);
+        answerFieldScrollPane.setBounds(10, 240, 510, 60);
         answerFieldScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         answerFieldScrollPane.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         moduleDetailsPanel.add(answerFieldScrollPane);
 
         JButton uploadButton = new JButton("Upload");
-        uploadButton.setBounds(420, 270, 100, 30);
+        uploadButton.setBounds(420, 310, 100, 30);
         uploadButton.setBackground(baseFrameBackgroundColor); 
         uploadButton.setForeground(Color.WHITE);
         uploadButton.setFont(new Font("Arial", Font.PLAIN, 14));
