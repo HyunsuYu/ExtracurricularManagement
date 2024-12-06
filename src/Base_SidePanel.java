@@ -16,7 +16,10 @@ import java.net.URISyntaxException;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.imageio.ImageIO;
@@ -74,7 +77,7 @@ public class Base_SidePanel extends MajorLayoutBase
 			}
 			
 			m_label_NewsTitle = new JLabel("Default");
-			m_label_NewsTitle.setBounds(20, 20, 70, 20);
+			m_label_NewsTitle.setBounds(20, 20, 150, 20);
 			m_label_NewsTitle.setFont(new Font("", Font.PLAIN, 10));
 			m_label_NewsTitle.setForeground(Color.WHITE);
 			
@@ -92,6 +95,8 @@ public class Base_SidePanel extends MajorLayoutBase
 			m_button_OpenNews = new JButton(icon);
 			m_button_OpenNews.setBounds(180, 15, 20, 20);
 			m_button_OpenNews.setBackground(new Color(33, 37, 41));
+			m_button_OpenNews.setBorderPainted(false);
+			m_button_OpenNews.setFocusPainted(false);
 			m_button_OpenNews.addActionListener(new ActionListener()
 					{
 						@Override
@@ -372,7 +377,7 @@ public class Base_SidePanel extends MajorLayoutBase
 	}
 	private void Init_LogIn()
 	{
-		m_label_CourseName = new JLabel("Test Builder");
+		m_label_CourseName = new JLabel("None");
 		m_label_CourseName.setBounds(30, 30, 240, 30);
 		m_label_CourseName.setFont(new Font("", Font.BOLD, 25));
 		m_label_CourseName.setForeground(Color.WHITE);
@@ -517,6 +522,58 @@ public class Base_SidePanel extends MajorLayoutBase
 		else
 		{
 			m_label_Roll.setText("Student");
+		}
+		
+		java.sql.Statement query = null;
+		try
+		{
+			query = m_baseFrame.GetSQLStatement();
+			
+			// start day
+			String queryContent = String.format("SELECT * FROM extracurricularmanagement.enrolled_student_infos"
+												+ " WHERE enrolled_student_id = \"%s\";",
+												m_baseFrame.GetLoginID().toString());
+			
+			ResultSet result = query.executeQuery(queryContent);
+			result.next();
+
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+			Date date = formatter.parse(result.getString(4));
+			
+			m_label_StartDay.setText(new SimpleDateFormat("MM/dd").format(date));
+			
+			// end day
+			int enrolledLectureID = Integer.parseInt(result.getString(2));
+			
+			queryContent = String.format("SELECT COUNT(*) AS recordCount FROM extracurricularmanagement.session_infos"
+										+ " WHERE lecture_id = \"%d\";",
+										enrolledLectureID);
+			
+			result = query.executeQuery(queryContent);
+			result.next();
+			
+			int recordCount = result.getInt("recordCount");
+			
+			Calendar cal = Calendar.getInstance();
+		    cal.setTime(date);
+		    
+		    cal.add(Calendar.DATE, recordCount * 7);
+		    
+		    m_label_EndDay.setText(new SimpleDateFormat("MM/dd").format(cal.getTime()));
+		    
+		    // lecture name
+		    queryContent = String.format("SELECT * FROM extracurricularmanagement.lecture_infos"
+		    							+ " WHERE lecture_id = \"%d\";",
+										enrolledLectureID);
+		    
+		    result = query.executeQuery(queryContent);
+			result.next();
+			
+			m_label_CourseName.setText(result.getString(2));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
 		}
 	}
 	private void RenderNewsState()

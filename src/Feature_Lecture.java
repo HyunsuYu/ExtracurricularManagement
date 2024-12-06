@@ -87,6 +87,7 @@ public class Feature_Lecture extends MajorLayoutBase
                     int sessionId = rs.getInt("session_id");
                     int sessionOrder = rs.getInt("session_order");
                     String sessionName = rs.getString("session_name");
+                    
                     JButton sessionButton = new JButton("Ep." + sessionOrder + " " + sessionName);
                     sessionButton.setBounds(10, yOffset, 180, 30);
                     sessionButton.setBackground(new Color(44, 48, 52));
