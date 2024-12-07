@@ -13,12 +13,6 @@ import java.util.UUID;
 
 public class BaseFrame extends JFrame
 {
-	// TODO : DB 연결 관련 데이터 Json Serialize 하고 AES 암호화 적용해서 Local에 저장하는 로직 추가 및 그 역도 구현
-	public class DBConnCredential
-	{
-		public String URL, User, Password;
-	}
-	
 	public class DashboardButton
 	{
 		private BaseFrame m_baseFrame;
@@ -155,16 +149,6 @@ public class BaseFrame extends JFrame
 	
  	public void OpenDashboardPanel(int targetIndex)
 	{
-		//for(int dashboardIndex = 0; dashboardIndex < 3; dashboardIndex++)
-		//{
-		//	m_panel_DashboardPanels[dashboardIndex].setVisible(false);
-		//	
-		//	if(targetIndex == dashboardIndex)
-		//	{
-		//		m_panel_DashboardPanels[dashboardIndex].setVisible(true);
-		//	}
-		//}
-		
 		switch(targetIndex)
 		{
 		case 0:

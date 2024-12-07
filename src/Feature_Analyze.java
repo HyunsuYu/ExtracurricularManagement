@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
@@ -21,7 +22,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 
 
 public class Feature_Analyze extends MajorLayoutBase
@@ -48,8 +51,11 @@ public class Feature_Analyze extends MajorLayoutBase
 	private int m_curModuleIDOffset;
 	private int m_curModuleID;
 	
+	private JLabel m_label_QuestionTitle;
+	private JLabel m_label_Question;
 	private JLabel m_label_AnswerTitle;
-	private JLabel m_label_Answer;
+	private JTextArea m_label_Answer;
+	private JScrollPane m_scrollPane_Answer;
 	private ArrayList<Integer> m_curEnrolledInfoIDs;
 	
 	
@@ -188,18 +194,40 @@ public class Feature_Analyze extends MajorLayoutBase
 		m_answers.setBounds(305, 205, 435, 195);
 		m_answers.setBackground(new Color(44, 47, 50));
 		
+		m_label_QuestionTitle = new JLabel("Question");
+		m_label_QuestionTitle.setBounds(20, 20, 240, 13);
+		m_label_QuestionTitle.setFont(new Font("", Font.BOLD, 13));
+		m_label_QuestionTitle.setForeground(Color.WHITE);
+		m_label_QuestionTitle.setHorizontalAlignment(SwingConstants.LEFT);
+		
+		m_label_Question = new JLabel("None");
+		m_label_Question.setBounds(20, 45, 390, 30);
+		m_label_Question.setFont(new Font("", Font.PLAIN, 10));
+		m_label_Question.setForeground(Color.WHITE);
+		m_label_Question.setVerticalAlignment(SwingConstants.TOP);
+		m_label_Question.setHorizontalAlignment(SwingConstants.LEFT);
+		
 		m_label_AnswerTitle = new JLabel("Answer");
-		m_label_AnswerTitle.setBounds(20, 20, 240, 13);
+		m_label_AnswerTitle.setBounds(20, 85, 240, 13);
 		m_label_AnswerTitle.setFont(new Font("", Font.BOLD, 13));
 		m_label_AnswerTitle.setForeground(Color.WHITE);
 		m_label_AnswerTitle.setHorizontalAlignment(SwingConstants.LEFT);
 		
-		m_label_Answer = new JLabel("None");
-		m_label_Answer.setBounds(20, 45, 390, 140);
+		m_label_Answer = new JTextArea("None");
+		m_label_Answer.setBounds(20, 110, 390, 70);
 		m_label_Answer.setFont(new Font("", Font.PLAIN, 10));
 		m_label_Answer.setForeground(Color.WHITE);
-		m_label_Answer.setVerticalAlignment(SwingConstants.TOP);
-		m_label_Answer.setHorizontalAlignment(SwingConstants.LEFT);
+		m_label_Answer.setBackground(new Color(44, 47, 50));
+		m_label_Answer.setLineWrap(true);
+		m_label_Answer.setWrapStyleWord(true);
+		m_label_Answer.setEditable(false);
+		
+		m_scrollPane_Answer = new JScrollPane(m_label_Answer);
+		m_scrollPane_Answer.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		m_scrollPane_Answer.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		m_scrollPane_Answer.setBounds(20, 110, 390, 70);
+		m_scrollPane_Answer.setBackground(new Color(44, 47, 50));
+		m_scrollPane_Answer.setBorder(BorderFactory.createEmptyBorder());
 	}
 	
 	private void RenderScore()
@@ -391,16 +419,29 @@ public class Feature_Analyze extends MajorLayoutBase
 		{
 			query = m_baseFrame.GetSQLStatement();
 			
-			// start day
-			String queryContent = String.format("SELECT * FROM extracurricularmanagement.lecture_score_infos"
+			// question
+			String queryContent = String.format("SELECT module_question FROM extracurricularmanagement.module_infos"
+												+ " WHERE module_id = \"%d\";",
+												m_curModuleID);
+
+			ResultSet result = query.executeQuery(queryContent);
+			while(result.next())
+			{
+				m_label_Question.setText(result.getString("module_question"));
+			}
+			
+			// answer
+			queryContent = String.format("SELECT * FROM extracurricularmanagement.lecture_score_infos"
 												+ " WHERE enrolled_info_id = \"%d\" and module_id = \"%d\";",
 												m_curEnrolledInfoIDs.getFirst(), m_curModuleID);
 			
-			ResultSet result = query.executeQuery(queryContent);
+			result = query.executeQuery(queryContent);
 			while(result.next())
 			{
 				m_label_Answer.setText(result.getString("module_answer"));
 			}
+			
+			SwingUtilities.invokeLater(() -> m_scrollPane_Answer.getViewport().setViewPosition(new Point(0, 0)));
 		}
 		catch (Exception ex)
 		{
@@ -428,8 +469,10 @@ public class Feature_Analyze extends MajorLayoutBase
 		m_modules.add(m_label_ModuleTitle);
 		m_modules.add(m_scrollPane_Module);
 		
+		m_answers.add(m_label_QuestionTitle);
+		m_answers.add(m_label_Question);
 		m_answers.add(m_label_AnswerTitle);
-		m_answers.add(m_label_Answer);
+		m_answers.add(m_scrollPane_Answer);
 		
 		m_layout_Main.add(m_scoreLayout);
 		m_layout_Main.add(m_sessions);
