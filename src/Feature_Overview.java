@@ -65,13 +65,13 @@ public class Feature_Overview extends MajorLayoutBase {
 
         boolean isLoggedIn = m_baseFrame.GetLoginID() != null;
 
-        AddBookRecommendationBox(10, isLoggedIn);
+        AddBookRecommendationBox(0, isLoggedIn);
         AddLinkBox("./src/imgs/Microsoft.png", "Microsoft Document", "https://learn.microsoft.com/ko-kr/docs/",
-                "./src/imgs/Stack_Overflowicon.png", "Stack Overflow", "https://stackoverflow.com/", 10, isLoggedIn);
+                "./src/imgs/Stack_Overflowicon.png", "Stack Overflow", "https://stackoverflow.com/", 0, isLoggedIn);
         AddLinkBox("./src/imgs/githubicon.png", "Github", "https://github.com/",
                 "./src/imgs/googleicon.png", "Google", "https://www.google.co.uk/", 140, isLoggedIn);
         AddLinkBox("./src/imgs/W3schoolsicon.png", "W3Schools", "https://www.w3schools.com/",
-                "./src/imgs/RedditProgrammingicon.png", "Reddit Programming", "https://www.reddit.com/r/programming/", 270, isLoggedIn);
+                "./src/imgs/RedditProgrammingicon.png", "Reddit Programming", "https://www.reddit.com/r/programming/", 280, isLoggedIn);
 
         m_layout_Main.revalidate();
         m_layout_Main.repaint();
@@ -84,19 +84,23 @@ public class Feature_Overview extends MajorLayoutBase {
     private void AddBookRecommendationBox(int yPosition, boolean isLoggedIn) {
         JPanel m_bookBox = new JPanel();
         m_bookBox.setLayout(null);
-        m_bookBox.setBounds(20, yPosition, 400, 380);
+        m_bookBox.setBounds(0, yPosition, 460, 400);
         m_bookBox.setBackground(new Color(44, 47, 50));
         m_bookBox.setOpaque(true);
+        
+        JLabel m_titleLabel = CreateLabel("Recommended Books", 20, 5, 200, 20, SwingConstants.LEFT, Color.WHITE);
+        m_titleLabel.setFont(new Font("", Font.BOLD, 13)); 
+        m_bookBox.add(m_titleLabel);
 
         if (isLoggedIn) {
             AddBookCard(m_bookBox, "./src/imgs/book1.png", "Head First Java", "Kathy Sierra & Bert Bates",
-                    "https://search.shopping.naver.com/book/catalog/32465535089", 20, 10);
+                    "https://search.shopping.naver.com/book/catalog/32465535089", 20, 30);
             AddBookCard(m_bookBox, "./src/imgs/book2.png", "Effective Java 3/E", "Joshua Bloch",
-                    "https://search.shopping.naver.com/book/catalog/32436239326", 210, 10);
+                    "https://search.shopping.naver.com/book/catalog/32436239326", 240, 30);
             AddBookCard(m_bookBox, "./src/imgs/book3.png", "Clean Code", "Robert C. Martin",
-                    "https://search.shopping.naver.com/book/catalog/32474195676", 20, 195);
+                    "https://search.shopping.naver.com/book/catalog/32474195676", 20, 215);
             AddBookCard(m_bookBox, "./src/imgs/book4.png", "Optimizing Java", "Benjamin J.Evans",
-                    "https://search.shopping.naver.com/book/catalog/32436011847", 210, 195);
+                    "https://search.shopping.naver.com/book/catalog/32436011847", 240, 215);
         }
 
         m_layout_Main.add(m_bookBox);
@@ -105,17 +109,17 @@ public class Feature_Overview extends MajorLayoutBase {
     private void AddBookCard(JPanel parent, String imgPath, String title, String author, String link, int x, int y) {
         JPanel m_bookCard = new JPanel();
         m_bookCard.setLayout(null);
-        m_bookCard.setBounds(x, y, 170, 175);
+        m_bookCard.setBounds(x, y, 200, 175);
         m_bookCard.setBackground(new Color(60, 63, 65));
         m_bookCard.setOpaque(true);
 
         JButton m_bookButton = CreateBookButton(imgPath, link);
         m_bookCard.add(m_bookButton);
 
-        JLabel m_bookTitle = CreateLabel(title, 10, 130, 150, 20, SwingConstants.CENTER, Color.LIGHT_GRAY);
+        JLabel m_bookTitle = CreateLabel(title, 25, 130, 150, 20, SwingConstants.CENTER, Color.LIGHT_GRAY);
         m_bookCard.add(m_bookTitle);
 
-        JLabel m_bookAuthor = CreateLabel(author, 10, 155, 150, 15, SwingConstants.CENTER, Color.GRAY);
+        JLabel m_bookAuthor = CreateLabel(author, 25, 155, 150, 15, SwingConstants.CENTER, Color.GRAY);
         m_bookCard.add(m_bookAuthor);
 
         parent.add(m_bookCard);
@@ -123,7 +127,7 @@ public class Feature_Overview extends MajorLayoutBase {
 
     private JButton CreateBookButton(String imgPath, String link) {
         JButton m_bookButton = new JButton(new ImageIcon(LoadImage(imgPath, 90, 110)));
-        m_bookButton.setBounds(35, 10, 100, 120);
+        m_bookButton.setBounds(50, 10, 100, 120);
         m_bookButton.setBackground(new Color(60, 63, 65));
         m_bookButton.setBorderPainted(false);
         m_bookButton.setFocusPainted(false);
@@ -143,7 +147,7 @@ public class Feature_Overview extends MajorLayoutBase {
     private void AddLinkBox(String iconPath1, String name1, String url1, String iconPath2, String name2, String url2, int yPosition, boolean isLoggedIn) {
         JPanel m_linkBox = new JPanel();
         m_linkBox.setLayout(null);
-        m_linkBox.setBounds(450, yPosition, 270, 120);
+        m_linkBox.setBounds(470, yPosition, 270, 120);
         m_linkBox.setBackground(new Color(44, 47, 50));
         m_linkBox.setOpaque(true);
 
@@ -168,7 +172,7 @@ public class Feature_Overview extends MajorLayoutBase {
         panel.add(m_nameLabel);
 
         JButton m_linkButton = CreateLinkButton(url, isLoggedIn);
-        m_linkButton.setBounds(220, yPosition + 10, 25, 25);
+        m_linkButton.setBounds(225, yPosition + 10, 25, 25);
         panel.add(m_linkButton);
     }
 
