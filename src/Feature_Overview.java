@@ -88,7 +88,7 @@ public class Feature_Overview extends MajorLayoutBase {
         m_bookBox.setBackground(new Color(44, 47, 50));
         m_bookBox.setOpaque(true);
         
-        JLabel m_titleLabel = CreateLabel("Recommended Books", 20, 5, 200, 20, SwingConstants.LEFT, Color.WHITE);
+        JLabel m_titleLabel = CreateLabel("Recommended  Book  List", 20, 5, 200, 20, SwingConstants.LEFT, Color.WHITE);
         m_titleLabel.setFont(new Font("", Font.BOLD, 13)); 
         m_bookBox.add(m_titleLabel);
 
