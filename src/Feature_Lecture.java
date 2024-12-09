@@ -82,11 +82,20 @@ public class Feature_Lecture extends MajorLayoutBase
 
                 int yOffset = 10;
                 boolean firstSessionSelected = false;
-
+                int makedSessionID = -1;
                 while (rs.next()) {
                     int sessionId = rs.getInt("session_id");
                     int sessionOrder = rs.getInt("session_order");
                     String sessionName = rs.getString("session_name");
+                    
+                    if(makedSessionID == sessionId)
+                    {
+                    	continue;
+                    }
+                    else
+                    {
+                    	makedSessionID = sessionId;
+                    }
                     
                     JButton sessionButton = new JButton("Ep." + sessionOrder + " " + sessionName);
                     sessionButton.setBounds(10, yOffset, 180, 30);
