@@ -243,8 +243,8 @@ public class BaseFrame extends JFrame
 	      
 	  	try
 	   	{
-	     	String url = "jdbc:mysql://univ-project.mysql.database.azure.com:3306/extracurricularmanagement?useSSL=false&requireSSL=false";
-	     	m_dbConn = DriverManager.getConnection(url, "HyunsuYu", "LiOiE6478++");
+	     	String url = "NULL";
+	     	m_dbConn = DriverManager.getConnection(url, "NULL", "NULL");
 	   	}
 	  	catch(SQLException e)
 	  	{
